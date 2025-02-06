@@ -30,5 +30,9 @@ lazy val apiCore = (crossProject(JSPlatform, JVMPlatform) in file("api-core"))
   .settings(
     name := "api-core",
     libraryDependencies ++= Seq(
+      "com.peknight" %%% "error-core" % pekErrorVersion,
     ),
   )
+
+val pekVersion = "0.1.0-SNAPSHOT"
+val pekErrorVersion = pekVersion
