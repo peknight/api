@@ -19,6 +19,7 @@ lazy val api = (project in file("."))
   .aggregate(
     apiCore.jvm,
     apiCore.js,
+    apiInstances,
   )
   .settings(commonSettings)
   .settings(
@@ -34,5 +35,28 @@ lazy val apiCore = (crossProject(JSPlatform, JVMPlatform) in file("api-core"))
     ),
   )
 
+lazy val apiInstances = (project in file("api-instances"))
+  .aggregate(
+    apiCodecInstances.jvm,
+    apiCodecInstances.js,
+  )
+  .settings(commonSettings)
+  .settings(
+    name := "api-instances",
+    libraryDependencies ++= Seq(
+    ),
+  )
+
+lazy val apiCodecInstances = (crossProject(JSPlatform, JVMPlatform) in file("api-instances/codec"))
+  .dependsOn(apiCore)
+  .settings(commonSettings)
+  .settings(
+    name := "api-codec-instances",
+    libraryDependencies ++= Seq(
+      "com.peknight" %%% "codec-core" % pekCodecVersion,
+    ),
+  )
+
 val pekVersion = "0.1.0-SNAPSHOT"
 val pekErrorVersion = pekVersion
+val pekCodecVersion = pekVersion
