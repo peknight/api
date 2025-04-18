@@ -1,8 +1,8 @@
 package com.peknight.api.codec.instances
 
-import cats.Applicative
 import cats.data.Ior
 import cats.syntax.option.*
+import cats.{Applicative, Show}
 import com.peknight.api.Result
 import com.peknight.api.pagination.Pagination
 import com.peknight.codec.cursor.Cursor
@@ -34,7 +34,8 @@ trait ResultInstances:
     Applicative[F], ObjectType[S], NullType[S], BooleanType[S],
     Decoder[F, Cursor[S], P],
     Decoder[F, Cursor[S], E],
-    Decoder[F, Cursor[S], A]
+    Decoder[F, Cursor[S], A],
+    Show[S]
   ): Decoder[F, Cursor[S], Res] =
     Decoder.forProductMap[F, S, Res, (Option[Boolean], Option[A], Option[E], Option[P])](
       (successLabel, dataLabel, errorLabel, paginationLabel)
@@ -55,7 +56,8 @@ trait ResultInstances:
     Applicative[F], ObjectType[S], NullType[S], BooleanType[S],
     Encoder[F, S, P], Decoder[F, Cursor[S], P],
     Encoder[F, S, E], Decoder[F, Cursor[S], E],
-    Encoder[F, S, A], Decoder[F, Cursor[S], A]
+    Encoder[F, S, A], Decoder[F, Cursor[S], A],
+    Show[S]
   ): Codec[F, S, Cursor[S], Res] =
     Codec[F, S, Cursor[S], Res](using
       encodeResult[F, S, P, E, A, Res](successLabel, dataLabel, errorLabel, paginationLabel)(mapError),
